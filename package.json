@@ -1,0 +1,23 @@
+{
+  "name": "color-utils",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "public-system": "cp ./node_modules/systemjs/dist/system-production.js ./public/system.js",
+    "postinstall": "npm run public-system && tsc",
+    "build:system": "tsc",
+    "build:commonjs": "tsc -p tsconfig.out.json",
+    "watch": "onchange 'src/**/*.ts' -i -v -- tsc"
+  },
+  "author": "",
+  "dependencies": {
+    "systemjs": "^0.20.19"
+  },
+  "devDependencies": {
+    "http-server": "^0.10.0",
+    "onchange": "^3.2.1",
+    "typescript": "^2.5.3"
+  }
+}
