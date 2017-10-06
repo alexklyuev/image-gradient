@@ -1,5 +1,8 @@
 type SlotFn = (imageDataIndex: number, width: number, height: number) => number;
 
+/**
+ * @deprecated use BaseGradientImage descendants
+ */
 export class GradientImage {
   public static readonly solidColorFn = (color: number[]): SlotFn => {
     return (index: number, width: number, height: number): number => {
@@ -96,8 +99,7 @@ export class GradientImage {
       const verticalRange = height / (colorsY.length - 1);
       const verticalSlot = Math.floor(yPosition / verticalRange);
       const relHeight = height / (colorsY.length - 1);
-      const relWidth = width / (colorsY.length - 1);
-      const relYPosition = Math.round(index / width / 4);
+      const relYPosition = yPosition % relHeight;
       const valA = colorsY[verticalSlot][slotIndex];
       const valB = (colorsY[verticalSlot + 1] || colorsY[verticalSlot])[slotIndex];
       const valT = valA * (relHeight - relYPosition) / relHeight;
@@ -124,7 +126,7 @@ export class GradientImage {
     const {width, height} = this.ctx.canvas;
     const imageData = this.ctx.createImageData(width, height);
     for (let i = 0; i < width * height * 4; i++) {
-      imageData.data[i] = fn(i, width, height);
+      imageData.data[i] = this.drawFn(i, width, height);
     }
     this.ctx.putImageData(imageData, 0, 0);
   }

@@ -1,6 +1,6 @@
 {
-  "name": "color-utils",
-  "version": "0.0.1",
+  "name": "color-picker",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,19 @@
     "postinstall": "npm run public-system && tsc",
     "build:system": "tsc",
     "build:commonjs": "tsc -p tsconfig.out.json",
-    "watch": "onchange 'src/**/*.ts' -i -v -- tsc"
+    "watch": "onchange 'src/**/*.ts' -i -v -- tsc",
+    "start": "concurrently 'http-server' 'npm run watch'"
   },
   "author": "",
   "dependencies": {
     "systemjs": "^0.20.19"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.6.0",
+    "concurrently": "^3.5.0",
     "http-server": "^0.10.0",
+    "jasmine": "^2.8.0",
+    "karma": "^1.7.1",
     "onchange": "^3.2.1",
     "typescript": "^2.5.3"
   }

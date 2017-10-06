@@ -1,6 +1,72 @@
-System.register("rgb/rgb-color", [], function (exports_1, context_1) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+System.register("draggable/draggable", [], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var Draggable;
+    return {
+        setters: [],
+        execute: function () {
+            Draggable = /** @class */ (function () {
+                function Draggable(el, container) {
+                    if (container === void 0) { container = document.body; }
+                    this.el = el;
+                    this.container = container;
+                    this.initCoords = [0, 0];
+                }
+                Draggable.prototype.start = function () {
+                    var _this = this;
+                    Object.assign(this.el.style, {
+                        position: 'absolute',
+                    });
+                    this.container.appendChild(this.el);
+                    var elOnMove = function (event) {
+                        var clientX = event.clientX, clientY = event.clientY;
+                        var _a = _this.initCoords, initX = _a[0], initY = _a[1];
+                        var _b = _this.el.getBoundingClientRect(), top = _b.top, left = _b.left;
+                        Object.assign(_this.el.style, {
+                            left: left + clientX - initX + 'px',
+                            top: top + clientY - initY + 'px',
+                        });
+                        _this.initCoords = [event.clientX, event.clientY];
+                    };
+                    var elOnDown = function (event) {
+                        _this.initCoords = [event.clientX, event.clientY];
+                        _this.container.addEventListener('mousemove', elOnMove);
+                        _this.container.addEventListener('mouseup', elOnUp);
+                    };
+                    var elOnUp = function (event) {
+                        _this.container.removeEventListener('mousemove', elOnMove);
+                        _this.container.removeEventListener('mouseup', elOnUp);
+                    };
+                    this.el.addEventListener('mousedown', elOnDown);
+                    this.onStop = function () { _this.el.removeEventListener('mousedown', elOnDown); };
+                };
+                Draggable.prototype.stop = function () {
+                    this.onStop();
+                };
+                Draggable.prototype.detach = function () {
+                    this.stop();
+                    this.container.removeChild(this.el);
+                    return this.el;
+                };
+                return Draggable;
+            }());
+            exports_1("Draggable", Draggable);
+        }
+    };
+});
+System.register("rgb/rgb-color", [], function (exports_2, context_2) {
+    "use strict";
+    var __moduleName = context_2 && context_2.id;
     var RgbColor;
     return {
         setters: [],
@@ -46,13 +112,13 @@ System.register("rgb/rgb-color", [], function (exports_1, context_1) {
                 };
                 return RgbColor;
             }());
-            exports_1("RgbColor", RgbColor);
+            exports_2("RgbColor", RgbColor);
         }
     };
 });
-System.register("rgba/rgba-color", [], function (exports_2, context_2) {
+System.register("rgba/rgba-color", [], function (exports_3, context_3) {
     "use strict";
-    var __moduleName = context_2 && context_2.id;
+    var __moduleName = context_3 && context_3.id;
     var RgbaColor;
     return {
         setters: [],
@@ -71,13 +137,13 @@ System.register("rgba/rgba-color", [], function (exports_2, context_2) {
                 };
                 return RgbaColor;
             }());
-            exports_2("RgbaColor", RgbaColor);
+            exports_3("RgbaColor", RgbaColor);
         }
     };
 });
-System.register("rgb/css-rgb", ["rgb/rgb-color"], function (exports_3, context_3) {
+System.register("rgb/css-rgb", ["rgb/rgb-color"], function (exports_4, context_4) {
     "use strict";
-    var __moduleName = context_3 && context_3.id;
+    var __moduleName = context_4 && context_4.id;
     var rgb_color_1, CssRgb;
     return {
         setters: [
@@ -95,13 +161,13 @@ System.register("rgb/css-rgb", ["rgb/rgb-color"], function (exports_3, context_3
                 };
                 return CssRgb;
             }());
-            exports_3("CssRgb", CssRgb);
+            exports_4("CssRgb", CssRgb);
         }
     };
 });
-System.register("rgba/css-rgba", ["rgba/rgba-color"], function (exports_4, context_4) {
+System.register("rgba/css-rgba", ["rgba/rgba-color"], function (exports_5, context_5) {
     "use strict";
-    var __moduleName = context_4 && context_4.id;
+    var __moduleName = context_5 && context_5.id;
     var rgba_color_1, CssRgba;
     return {
         setters: [
@@ -128,13 +194,13 @@ System.register("rgba/css-rgba", ["rgba/rgba-color"], function (exports_4, conte
                 };
                 return CssRgba;
             }());
-            exports_4("CssRgba", CssRgba);
+            exports_5("CssRgba", CssRgba);
         }
     };
 });
-System.register("hex/css-hex", [], function (exports_5, context_5) {
+System.register("hex/css-hex", [], function (exports_6, context_6) {
     "use strict";
-    var __moduleName = context_5 && context_5.id;
+    var __moduleName = context_6 && context_6.id;
     var CssHex;
     return {
         setters: [],
@@ -148,13 +214,215 @@ System.register("hex/css-hex", [], function (exports_5, context_5) {
                 };
                 return CssHex;
             }());
-            exports_5("CssHex", CssHex);
+            exports_6("CssHex", CssHex);
         }
     };
 });
-System.register("image/gradient-image", [], function (exports_6, context_6) {
+System.register("gradient-image/base-gradient-image", [], function (exports_7, context_7) {
     "use strict";
-    var __moduleName = context_6 && context_6.id;
+    var __moduleName = context_7 && context_7.id;
+    var BaseGradientImage;
+    return {
+        setters: [],
+        execute: function () {
+            BaseGradientImage = /** @class */ (function () {
+                function BaseGradientImage(ctx) {
+                    this.ctx = ctx;
+                }
+                BaseGradientImage.prototype.draw = function (colorsX, colorsY) {
+                    this.colorsX = colorsX;
+                    this.colorsY = colorsY;
+                    var _a = this.getWidthHeight(), width = _a[0], height = _a[1];
+                    var imageData = this.ctx.createImageData(width, height);
+                    for (var i = 0; i < width * height * 4; i++) {
+                        imageData.data[i] = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
+                    }
+                    this.ctx.putImageData(imageData, 0, 0);
+                };
+                BaseGradientImage.prototype.getColorByCoords = function (x, y) {
+                    var _a = this.getWidthHeight(), width = _a[0], height = _a[1];
+                    var firstIndex = (y * width + x) * 4;
+                    var color = [];
+                    for (var i = firstIndex; i < firstIndex + 4; i++) {
+                        var slotValue = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
+                        var slotValueRounded = Math.round(slotValue);
+                        color.push(slotValueRounded);
+                    }
+                    return color;
+                };
+                BaseGradientImage.prototype.getWidthHeight = function () {
+                    var _a = this.ctx.canvas, width = _a.width, height = _a.height;
+                    return [width, height];
+                };
+                return BaseGradientImage;
+            }());
+            exports_7("BaseGradientImage", BaseGradientImage);
+        }
+    };
+});
+System.register("gradient-image/multi-vertical-gradient-image", ["gradient-image/base-gradient-image"], function (exports_8, context_8) {
+    "use strict";
+    var __moduleName = context_8 && context_8.id;
+    var base_gradient_image_1, MultiVerticalGradientImage;
+    return {
+        setters: [
+            function (base_gradient_image_1_1) {
+                base_gradient_image_1 = base_gradient_image_1_1;
+            }
+        ],
+        execute: function () {
+            MultiVerticalGradientImage = /** @class */ (function (_super) {
+                __extends(MultiVerticalGradientImage, _super);
+                function MultiVerticalGradientImage() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                MultiVerticalGradientImage.prototype.drawPixelSlotFn = function (colorsX, colorsY) {
+                    var _a = this.getWidthHeight(), width = _a[0], height = _a[1];
+                    return function (index) {
+                        var slotIndex = index % 4;
+                        var xPosition = (index % (width * 4)) / 4;
+                        var yPosition = Math.round(index / width / 4);
+                        var verticalRange = height / (colorsY.length - 1);
+                        var verticalSlot = Math.floor(yPosition / verticalRange);
+                        var relHeight = height / (colorsY.length - 1);
+                        var relYPosition = yPosition % relHeight;
+                        var valA = colorsY[verticalSlot][slotIndex];
+                        var valB = (colorsY[verticalSlot + 1] || colorsY[verticalSlot])[slotIndex];
+                        var valT = valA * (relHeight - relYPosition) / relHeight;
+                        var valM = valB * relYPosition / relHeight;
+                        var valV = valT + valM;
+                        if (Array.isArray(colorsX) && colorsX.length > 0) {
+                            var valC = colorsX[0][slotIndex];
+                            var val = ((valV * (width - xPosition)) / width) + ((valC * (xPosition) / width));
+                            return val;
+                        }
+                        else {
+                            return valV;
+                        }
+                    };
+                };
+                return MultiVerticalGradientImage;
+            }(base_gradient_image_1.BaseGradientImage));
+            exports_8("MultiVerticalGradientImage", MultiVerticalGradientImage);
+        }
+    };
+});
+System.register("gradient-image/multi-horizontal-gradient-image", ["gradient-image/base-gradient-image"], function (exports_9, context_9) {
+    "use strict";
+    var __moduleName = context_9 && context_9.id;
+    var base_gradient_image_2, MultiHorizontalGradientImage;
+    return {
+        setters: [
+            function (base_gradient_image_2_1) {
+                base_gradient_image_2 = base_gradient_image_2_1;
+            }
+        ],
+        execute: function () {
+            MultiHorizontalGradientImage = /** @class */ (function (_super) {
+                __extends(MultiHorizontalGradientImage, _super);
+                function MultiHorizontalGradientImage() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                MultiHorizontalGradientImage.prototype.drawPixelSlotFn = function (colorsX, colorsY) {
+                    var _a = this.getWidthHeight(), width = _a[0], height = _a[1];
+                    return function (index) {
+                        var slotIndex = index % 4;
+                        var xPosition = (index % (width * 4)) / 4;
+                        var yPosition = Math.round(index / width / 4);
+                        var horizontalRange = width / (colorsX.length - 1);
+                        var horizontalSlot = Math.floor(xPosition / horizontalRange);
+                        var relWidth = width / (colorsX.length - 1);
+                        var relXPosition = (index % (relWidth * 4)) / 4;
+                        var valA = colorsX[horizontalSlot][slotIndex];
+                        var valB = colorsX[horizontalSlot + 1][slotIndex];
+                        var valL = valA * (relWidth - relXPosition) / relWidth;
+                        var valR = valB * relXPosition / relWidth;
+                        var valH = valL + valR;
+                        if (Array.isArray(colorsY) && colorsY.length > 0) {
+                            var valC = colorsY[0][slotIndex];
+                            var val = ((valH * (height - yPosition)) / height) + ((valC * (yPosition) / height));
+                            return val;
+                        }
+                        else {
+                            return valH;
+                        }
+                    };
+                };
+                return MultiHorizontalGradientImage;
+            }(base_gradient_image_2.BaseGradientImage));
+            exports_9("MultiHorizontalGradientImage", MultiHorizontalGradientImage);
+        }
+    };
+});
+System.register("gradient-image/index", ["gradient-image/multi-vertical-gradient-image", "gradient-image/multi-horizontal-gradient-image"], function (exports_10, context_10) {
+    "use strict";
+    var __moduleName = context_10 && context_10.id;
+    return {
+        setters: [
+            function (multi_vertical_gradient_image_1_1) {
+                exports_10({
+                    "MultiVerticalGradientImage": multi_vertical_gradient_image_1_1["MultiVerticalGradientImage"]
+                });
+            },
+            function (multi_horizontal_gradient_image_1_1) {
+                exports_10({
+                    "MultiHorizontalGradientImage": multi_horizontal_gradient_image_1_1["MultiHorizontalGradientImage"]
+                });
+            }
+        ],
+        execute: function () {
+        }
+    };
+});
+System.register("index", ["draggable/draggable", "rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "gradient-image/index"], function (exports_11, context_11) {
+    "use strict";
+    var __moduleName = context_11 && context_11.id;
+    return {
+        setters: [
+            function (draggable_1_1) {
+                exports_11({
+                    "Draggable": draggable_1_1["Draggable"]
+                });
+            },
+            function (rgb_color_2_1) {
+                exports_11({
+                    "RgbColor": rgb_color_2_1["RgbColor"]
+                });
+            },
+            function (rgba_color_2_1) {
+                exports_11({
+                    "RgbaColor": rgba_color_2_1["RgbaColor"]
+                });
+            },
+            function (css_rgb_1_1) {
+                exports_11({
+                    "CssRgb": css_rgb_1_1["CssRgb"]
+                });
+            },
+            function (css_rgba_1_1) {
+                exports_11({
+                    "CssRgba": css_rgba_1_1["CssRgba"]
+                });
+            },
+            function (css_hex_1_1) {
+                exports_11({
+                    "CssHex": css_hex_1_1["CssHex"]
+                });
+            },
+            function (index_1_1) {
+                exports_11({
+                    "MultiHorizontalGradientImage": index_1_1["MultiHorizontalGradientImage"],
+                    "MultiVerticalGradientImage": index_1_1["MultiVerticalGradientImage"]
+                });
+            }
+        ],
+        execute: function () {
+        }
+    };
+});
+System.register("image/gradient-image", [], function (exports_12, context_12) {
+    "use strict";
+    var __moduleName = context_12 && context_12.id;
     var GradientImage;
     return {
         setters: [],
@@ -168,7 +436,7 @@ System.register("image/gradient-image", [], function (exports_6, context_6) {
                     var _a = this.ctx.canvas, width = _a.width, height = _a.height;
                     var imageData = this.ctx.createImageData(width, height);
                     for (var i = 0; i < width * height * 4; i++) {
-                        imageData.data[i] = fn(i, width, height);
+                        imageData.data[i] = this.drawFn(i, width, height);
                     }
                     this.ctx.putImageData(imageData, 0, 0);
                 };
@@ -247,8 +515,7 @@ System.register("image/gradient-image", [], function (exports_6, context_6) {
                         var verticalRange = height / (colorsY.length - 1);
                         var verticalSlot = Math.floor(yPosition / verticalRange);
                         var relHeight = height / (colorsY.length - 1);
-                        var relWidth = width / (colorsY.length - 1);
-                        var relYPosition = Math.round(index / width / 4);
+                        var relYPosition = yPosition % relHeight;
                         var valA = colorsY[verticalSlot][slotIndex];
                         var valB = (colorsY[verticalSlot + 1] || colorsY[verticalSlot])[slotIndex];
                         var valT = valA * (relHeight - relYPosition) / relHeight;
@@ -266,47 +533,7 @@ System.register("image/gradient-image", [], function (exports_6, context_6) {
                 };
                 return GradientImage;
             }());
-            exports_6("GradientImage", GradientImage);
-        }
-    };
-});
-System.register("index", ["rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "image/gradient-image"], function (exports_7, context_7) {
-    "use strict";
-    var __moduleName = context_7 && context_7.id;
-    return {
-        setters: [
-            function (rgb_color_2_1) {
-                exports_7({
-                    "RgbColor": rgb_color_2_1["RgbColor"]
-                });
-            },
-            function (rgba_color_2_1) {
-                exports_7({
-                    "RgbaColor": rgba_color_2_1["RgbaColor"]
-                });
-            },
-            function (css_rgb_1_1) {
-                exports_7({
-                    "CssRgb": css_rgb_1_1["CssRgb"]
-                });
-            },
-            function (css_rgba_1_1) {
-                exports_7({
-                    "CssRgba": css_rgba_1_1["CssRgba"]
-                });
-            },
-            function (css_hex_1_1) {
-                exports_7({
-                    "CssHex": css_hex_1_1["CssHex"]
-                });
-            },
-            function (gradient_image_1_1) {
-                exports_7({
-                    "GradientImage": gradient_image_1_1["GradientImage"]
-                });
-            }
-        ],
-        execute: function () {
+            exports_12("GradientImage", GradientImage);
         }
     };
 });
