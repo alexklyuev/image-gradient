@@ -21,14 +21,21 @@ System.register("draggable/draggable", [], function (exports_1, context_1) {
                     this.el = el;
                     this.container = container;
                     this.initCoords = [0, 0];
+                    this.on = false;
+                    this.attached = false;
                 }
-                Draggable.prototype.start = function () {
+                Draggable.prototype.start = function (eventInterceptors) {
                     var _this = this;
+                    if (eventInterceptors === void 0) { eventInterceptors = {}; }
                     Object.assign(this.el.style, {
                         position: 'absolute',
                     });
                     this.container.appendChild(this.el);
+                    this.attached = true;
                     var elOnMove = function (event) {
+                        if (eventInterceptors.mousemove instanceof Function) {
+                            eventInterceptors.mousemove(event);
+                        }
                         var clientX = event.clientX, clientY = event.clientY;
                         var _a = _this.initCoords, initX = _a[0], initY = _a[1];
                         var _b = _this.el.getBoundingClientRect(), top = _b.top, left = _b.left;
@@ -39,24 +46,39 @@ System.register("draggable/draggable", [], function (exports_1, context_1) {
                         _this.initCoords = [event.clientX, event.clientY];
                     };
                     var elOnDown = function (event) {
+                        if (eventInterceptors.mousedown instanceof Function) {
+                            eventInterceptors.mousedown(event);
+                        }
                         _this.initCoords = [event.clientX, event.clientY];
                         _this.container.addEventListener('mousemove', elOnMove);
                         _this.container.addEventListener('mouseup', elOnUp);
                     };
                     var elOnUp = function (event) {
+                        if (eventInterceptors.mouseup instanceof Function) {
+                            eventInterceptors.mouseup(event);
+                        }
                         _this.container.removeEventListener('mousemove', elOnMove);
                         _this.container.removeEventListener('mouseup', elOnUp);
                     };
                     this.el.addEventListener('mousedown', elOnDown);
                     this.onStop = function () { _this.el.removeEventListener('mousedown', elOnDown); };
+                    this.on = true;
                 };
                 Draggable.prototype.stop = function () {
                     this.onStop();
+                    this.on = false;
                 };
                 Draggable.prototype.detach = function () {
                     this.stop();
                     this.container.removeChild(this.el);
+                    this.attached = false;
                     return this.el;
+                };
+                Draggable.prototype.isOn = function () {
+                    return this.on;
+                };
+                Draggable.prototype.isAttached = function () {
+                    return this.attached;
                 };
                 return Draggable;
             }());
@@ -374,7 +396,7 @@ System.register("gradient-image/index", ["gradient-image/multi-vertical-gradient
         }
     };
 });
-System.register("index", ["draggable/draggable", "rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "gradient-image/index"], function (exports_11, context_11) {
+System.register("color-picker", ["draggable/draggable", "rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "gradient-image/index"], function (exports_11, context_11) {
     "use strict";
     var __moduleName = context_11 && context_11.id;
     return {
