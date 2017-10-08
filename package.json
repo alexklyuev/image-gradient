@@ -1,16 +1,19 @@
 {
   "name": "color-picker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "public-system": "cp ./node_modules/systemjs/dist/system-production.js ./public/system.js",
     "postinstall": "npm run public-system && tsc",
-    "build:system": "tsc",
-    "build:commonjs": "tsc -p tsconfig.out.json",
-    "watch": "onchange 'src/**/*.ts' -i -v -- tsc",
-    "start": "concurrently 'http-server' 'npm run watch'"
+    "build:systemjs": "tsc -p tsconfig.systemjs.json",
+    "build:commonjs": "tsc -p tsconfig.cjs.json",
+    "build:mjs": "tsc -p tsconfig.mjs.json",
+    "watch:systemjs": "onchange 'src/**/*.ts' -i -v -- npm run build:systemjs",
+    "watch:mjs": "onchange 'src/**/*.ts' -i -v -- npm run build:mjs",
+    "serve:systemjs": "concurrently 'http-server' 'npm run watch:systemjs'",
+    "serve:mjs": "concurrently 'http-server' 'npm run watch:mjs'"
   },
   "author": "",
   "dependencies": {

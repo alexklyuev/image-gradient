@@ -442,9 +442,79 @@ System.register("color-picker", ["draggable/draggable", "rgb/rgb-color", "rgba/r
         }
     };
 });
-System.register("image/gradient-image", [], function (exports_12, context_12) {
+System.register("example-app", ["color-picker"], function (exports_12, context_12) {
     "use strict";
     var __moduleName = context_12 && context_12.id;
+    var color_picker_1, main;
+    return {
+        setters: [
+            function (color_picker_1_1) {
+                color_picker_1 = color_picker_1_1;
+            }
+        ],
+        execute: function () {
+            exports_12("main", main = function () {
+                var canvas = document.querySelector('#playground');
+                if (canvas instanceof HTMLCanvasElement) {
+                    var el_1 = document.createElement('div');
+                    Object.assign(el_1.style, {
+                        width: '150px',
+                        height: '55px',
+                        position: 'absolute',
+                        left: '20px',
+                        top: '20px',
+                        backgroundColor: 'white',
+                        cursor: 'move',
+                        boxShadow: 'rgb(100, 100, 100) 1px 1px 4px',
+                        fontSize: '10px',
+                        fontFamily: 'monospace',
+                        textAlign: 'center',
+                        color: 'black',
+                    });
+                    el_1.innerHTML = "\n      " + new color_picker_1.CssRgba([255, 255, 255, 255]) + "<br />\n      this thing is draggable<br />\n      and<br />\n      shows picked color\n    ";
+                    var dragEl = new color_picker_1.Draggable(el_1);
+                    dragEl.start();
+                    var drawOnDocument_1 = function () {
+                        canvas.setAttribute('width', window.innerWidth.toString());
+                        canvas.setAttribute('height', window.innerHeight.toString());
+                        var ctx = canvas.getContext('2d');
+                        var gradientImage = new color_picker_1.MultiHorizontalGradientImage(ctx);
+                        gradientImage.draw([
+                            [255, 0, 0, 255],
+                            [255, 127, 0, 255],
+                            [255, 255, 0, 255],
+                            [0, 255, 0, 255],
+                            [0, 255, 255, 255],
+                            [0, 0, 255, 255],
+                            [255, 0, 255, 255],
+                        ], [
+                            [255, 255, 255, 255],
+                        ]);
+                        var onPick = function (event) {
+                            var clientX = event.clientX, clientY = event.clientY;
+                            var colorData = gradientImage.getColorByCoords(clientX, clientY);
+                            console.info(colorData);
+                            var color = new color_picker_1.CssRgba(colorData);
+                            el_1.style.backgroundColor = color.toString();
+                            el_1.innerText = color.toString();
+                            el_1.style.color = colorData.slice(0, -1).reduce(function (acc, slot) { return acc + slot; }, 0) > 255 * 3 / 2 ? 'black' : 'white';
+                        };
+                        canvas.addEventListener('click', onPick);
+                        return function () { canvas.removeEventListener('click', onPick); };
+                    };
+                    var removePickListener_1 = drawOnDocument_1();
+                    window.addEventListener('resize', function (event) {
+                        removePickListener_1();
+                        removePickListener_1 = drawOnDocument_1();
+                    });
+                }
+            });
+        }
+    };
+});
+System.register("image/gradient-image", [], function (exports_13, context_13) {
+    "use strict";
+    var __moduleName = context_13 && context_13.id;
     var GradientImage;
     return {
         setters: [],
@@ -555,7 +625,7 @@ System.register("image/gradient-image", [], function (exports_12, context_12) {
                 };
                 return GradientImage;
             }());
-            exports_12("GradientImage", GradientImage);
+            exports_13("GradientImage", GradientImage);
         }
     };
 });
