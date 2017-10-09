@@ -1,7 +1,10 @@
-System.import('example-app').then(
+System.import('example-app/index').then(
   ({
-    main,
+    ExampleApp,
   }) => {
-    main();
+    window.addEventListener('DOMContentLoaded', event => {
+      const app = new ExampleApp();
+      app.run();
+    });
   }
 );

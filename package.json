@@ -1,7 +1,7 @@
 {
   "name": "color-picker",
-  "version": "0.0.3",
-  "description": "",
+  "version": "0.0.5",
+  "description": "color picker lib and example app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,7 +15,7 @@
     "serve:systemjs": "concurrently 'http-server' 'npm run watch:systemjs'",
     "serve:mjs": "concurrently 'http-server' 'npm run watch:mjs'"
   },
-  "author": "",
+  "author": "alexeyklyuev",
   "dependencies": {
     "systemjs": "^0.20.19"
   },
