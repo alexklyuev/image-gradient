@@ -1,12 +1,11 @@
 {
-  "name": "color-picker",
-  "version": "0.0.5",
+  "name": "image-gradient",
+  "version": "0.1.0",
   "description": "color picker lib and example app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "public-system": "cp ./node_modules/systemjs/dist/system-production.js ./public/system.js",
-    "postinstall": "npm run public-system && tsc",
     "build:systemjs": "tsc -p tsconfig.systemjs.json",
     "build:commonjs": "tsc -p tsconfig.cjs.json",
     "build:mjs": "tsc -p tsconfig.mjs.json",

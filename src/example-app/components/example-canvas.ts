@@ -21,11 +21,12 @@ export class ExampleCanvas extends HTMLElement {
     super();
     const shadow = this.attachShadow({mode: 'open'});
     const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     shadow.appendChild(canvas);
-    let removePickListener = this.drawOnDocument(canvas);
+    let removePickListener = this.drawOnDocument(ctx);
     window.addEventListener('resize', (event: Event) => {
       removePickListener();
-      removePickListener = this.drawOnDocument(canvas);
+      removePickListener = this.drawOnDocument(ctx);
     });
   }
 
@@ -35,10 +36,9 @@ export class ExampleCanvas extends HTMLElement {
     }
   }
 
-  private drawOnDocument(canvas: HTMLCanvasElement) {
-    canvas.setAttribute('width', window.innerWidth.toString());
-    canvas.setAttribute('height', window.innerHeight.toString());
-    const ctx = canvas.getContext('2d');
+  private drawOnDocument(ctx: CanvasRenderingContext2D) {
+    ctx.canvas.setAttribute('width', window.innerWidth.toString());
+    ctx.canvas.setAttribute('height', window.innerHeight.toString());
     this.gradientImage = new MultiHorizontalGradientImage(ctx);
     this.gradientImage.draw(
       this.rainbow,
@@ -53,8 +53,8 @@ export class ExampleCanvas extends HTMLElement {
         bubbles: true,
       }));
     };
-    canvas.addEventListener('click', onPick);
-    return () => {canvas.removeEventListener('click', onPick)};
+    ctx.canvas.addEventListener('click', onPick);
+    return () => {ctx.canvas.removeEventListener('click', onPick)};
   }
 
   private onChangeFade(colorStr: string) {

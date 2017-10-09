@@ -2,9 +2,14 @@ export abstract class BaseGradientImage {
   protected colorsX: number[][];
   protected colorsY: number[][];
 
+  protected imageData: ImageData;
+
   constructor(
     private ctx: CanvasRenderingContext2D,
-  ) {}
+  ) {
+    const [width, height] = this.getWidthHeight();
+    this.imageData = this.ctx.createImageData(width, height);
+  }
 
   public abstract drawPixelSlotFn(colorsX: number[][], colorsY: number[][]): (pixelSlotIndex: number) => number;
 
@@ -15,11 +20,10 @@ export abstract class BaseGradientImage {
     this.colorsX = colorsX;
     this.colorsY = colorsY;
     const [width, height] = this.getWidthHeight();
-    const imageData = this.ctx.createImageData(width, height);
     for (let i = 0; i < width * height * 4; i++) {
-      imageData.data[i] = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
+      this.imageData.data[i] = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
     }
-    this.ctx.putImageData(imageData, 0, 0);
+    this.ctx.putImageData(this.imageData, 0, 0);
   }
 
   public getColorByCoords(x: number, y: number): number[] {

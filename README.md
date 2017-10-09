@@ -1,8 +1,8 @@
-## Color Picker
+## Image Gradient
 
-### Run systemjs module version
+Library for drawing 2d gradient images on html canvas. And example app.
+
+### Run example app
  - `npm install`
+ - `npm run public-system`
  - `npm run serve:systemjs`
-
-### Run es2015 modules version
-Not working for now due to [typescript bug](https://github.com/Microsoft/TypeScript/issues/13422)

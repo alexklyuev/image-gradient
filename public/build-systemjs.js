@@ -231,16 +231,17 @@ System.register("gradient-image/base-gradient-image", [], function (exports_7, c
             BaseGradientImage = class BaseGradientImage {
                 constructor(ctx) {
                     this.ctx = ctx;
+                    const [width, height] = this.getWidthHeight();
+                    this.imageData = this.ctx.createImageData(width, height);
                 }
                 draw(colorsX, colorsY) {
                     this.colorsX = colorsX;
                     this.colorsY = colorsY;
                     const [width, height] = this.getWidthHeight();
-                    const imageData = this.ctx.createImageData(width, height);
                     for (let i = 0; i < width * height * 4; i++) {
-                        imageData.data[i] = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
+                        this.imageData.data[i] = this.drawPixelSlotFn(this.colorsX, this.colorsY)(i);
                     }
-                    this.ctx.putImageData(imageData, 0, 0);
+                    this.ctx.putImageData(this.imageData, 0, 0);
                 }
                 getColorByCoords(x, y) {
                     const [width, height] = this.getWidthHeight();
@@ -437,11 +438,12 @@ System.register("example-app/components/example-canvas", ["color-picker"], funct
                     ];
                     const shadow = this.attachShadow({ mode: 'open' });
                     const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
                     shadow.appendChild(canvas);
-                    let removePickListener = this.drawOnDocument(canvas);
+                    let removePickListener = this.drawOnDocument(ctx);
                     window.addEventListener('resize', (event) => {
                         removePickListener();
-                        removePickListener = this.drawOnDocument(canvas);
+                        removePickListener = this.drawOnDocument(ctx);
                     });
                 }
                 static get observedAttributes() {
@@ -454,10 +456,9 @@ System.register("example-app/components/example-canvas", ["color-picker"], funct
                             return;
                     }
                 }
-                drawOnDocument(canvas) {
-                    canvas.setAttribute('width', window.innerWidth.toString());
-                    canvas.setAttribute('height', window.innerHeight.toString());
-                    const ctx = canvas.getContext('2d');
+                drawOnDocument(ctx) {
+                    ctx.canvas.setAttribute('width', window.innerWidth.toString());
+                    ctx.canvas.setAttribute('height', window.innerHeight.toString());
                     this.gradientImage = new color_picker_1.MultiHorizontalGradientImage(ctx);
                     this.gradientImage.draw(this.rainbow, [[255, 255, 255, 255]]);
                     const onPick = (event) => {
@@ -469,8 +470,8 @@ System.register("example-app/components/example-canvas", ["color-picker"], funct
                             bubbles: true,
                         }));
                     };
-                    canvas.addEventListener('click', onPick);
-                    return () => { canvas.removeEventListener('click', onPick); };
+                    ctx.canvas.addEventListener('click', onPick);
+                    return () => { ctx.canvas.removeEventListener('click', onPick); };
                 }
                 onChangeFade(colorStr) {
                     const colorData = colorStr.split(',').map(slot => parseInt(slot));
