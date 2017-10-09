@@ -12,7 +12,8 @@
     "watch:systemjs": "onchange 'src/**/*.ts' -i -v -- npm run build:systemjs",
     "watch:mjs": "onchange 'src/**/*.ts' -i -v -- npm run build:mjs",
     "serve:systemjs": "concurrently 'http-server' 'npm run watch:systemjs'",
-    "serve:mjs": "concurrently 'http-server' 'npm run watch:mjs'"
+    "serve:mjs": "concurrently 'http-server' 'npm run watch:mjs'",
+    "start": "npm run serve:systemjs"
   },
   "author": "alexeyklyuev",
   "dependencies": {

@@ -1,5 +1,4 @@
-import { CssRgba, MultiHorizontalGradientImage } from '../../color-picker';
-import { BaseGradientImage } from '../../gradient-image/base-gradient-image';
+import { BaseGradientImage, MultiHorizontalGradientImage, CssRgba } from '../../index';
 
 export class ExampleCanvas extends HTMLElement {
   private gradientImage: BaseGradientImage;

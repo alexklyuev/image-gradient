@@ -1,4 +1,4 @@
-import { CssRgba, Draggable } from '../../color-picker';
+import { CssRgba, Draggable } from '../../index';
 
 export class ExampleInfo extends HTMLElement {
 

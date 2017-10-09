@@ -1,4 +1,4 @@
-import { Draggable } from '../../color-picker';
+import { Draggable } from '../../index';
 
 export class ExampleFade extends HTMLElement {
   private list: HTMLUListElement;

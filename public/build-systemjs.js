@@ -347,11 +347,16 @@ System.register("gradient-image/multi-horizontal-gradient-image", ["gradient-ima
         }
     };
 });
-System.register("gradient-image/index", ["gradient-image/multi-vertical-gradient-image", "gradient-image/multi-horizontal-gradient-image"], function (exports_10, context_10) {
+System.register("gradient-image/index", ["gradient-image/base-gradient-image", "gradient-image/multi-vertical-gradient-image", "gradient-image/multi-horizontal-gradient-image"], function (exports_10, context_10) {
     "use strict";
     var __moduleName = context_10 && context_10.id;
     return {
         setters: [
+            function (base_gradient_image_3_1) {
+                exports_10({
+                    "BaseGradientImage": base_gradient_image_3_1["BaseGradientImage"]
+                });
+            },
             function (multi_vertical_gradient_image_1_1) {
                 exports_10({
                     "MultiVerticalGradientImage": multi_vertical_gradient_image_1_1["MultiVerticalGradientImage"]
@@ -367,7 +372,7 @@ System.register("gradient-image/index", ["gradient-image/multi-vertical-gradient
         }
     };
 });
-System.register("color-picker", ["draggable/draggable", "rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "gradient-image/index"], function (exports_11, context_11) {
+System.register("index", ["draggable/draggable", "rgb/rgb-color", "rgba/rgba-color", "rgb/css-rgb", "rgba/css-rgba", "hex/css-hex", "gradient-image/index"], function (exports_11, context_11) {
     "use strict";
     var __moduleName = context_11 && context_11.id;
     return {
@@ -404,6 +409,7 @@ System.register("color-picker", ["draggable/draggable", "rgb/rgb-color", "rgba/r
             },
             function (index_1_1) {
                 exports_11({
+                    "BaseGradientImage": index_1_1["BaseGradientImage"],
                     "MultiHorizontalGradientImage": index_1_1["MultiHorizontalGradientImage"],
                     "MultiVerticalGradientImage": index_1_1["MultiVerticalGradientImage"]
                 });
@@ -413,14 +419,14 @@ System.register("color-picker", ["draggable/draggable", "rgb/rgb-color", "rgba/r
         }
     };
 });
-System.register("example-app/components/example-canvas", ["color-picker"], function (exports_12, context_12) {
+System.register("example-app/components/example-canvas", ["index"], function (exports_12, context_12) {
     "use strict";
     var __moduleName = context_12 && context_12.id;
-    var color_picker_1, ExampleCanvas;
+    var index_2, ExampleCanvas;
     return {
         setters: [
-            function (color_picker_1_1) {
-                color_picker_1 = color_picker_1_1;
+            function (index_2_1) {
+                index_2 = index_2_1;
             }
         ],
         execute: function () {
@@ -459,12 +465,12 @@ System.register("example-app/components/example-canvas", ["color-picker"], funct
                 drawOnDocument(ctx) {
                     ctx.canvas.setAttribute('width', window.innerWidth.toString());
                     ctx.canvas.setAttribute('height', window.innerHeight.toString());
-                    this.gradientImage = new color_picker_1.MultiHorizontalGradientImage(ctx);
+                    this.gradientImage = new index_2.MultiHorizontalGradientImage(ctx);
                     this.gradientImage.draw(this.rainbow, [[255, 255, 255, 255]]);
                     const onPick = (event) => {
                         const { clientX, clientY } = event;
                         const colorData = this.gradientImage.getColorByCoords(clientX, clientY);
-                        const color = new color_picker_1.CssRgba(colorData);
+                        const color = new index_2.CssRgba(colorData);
                         this.dispatchEvent(new CustomEvent('pick', {
                             detail: { colorData },
                             bubbles: true,
@@ -482,14 +488,14 @@ System.register("example-app/components/example-canvas", ["color-picker"], funct
         }
     };
 });
-System.register("example-app/components/example-info", ["color-picker"], function (exports_13, context_13) {
+System.register("example-app/components/example-info", ["index"], function (exports_13, context_13) {
     "use strict";
     var __moduleName = context_13 && context_13.id;
-    var color_picker_2, ExampleInfo;
+    var index_3, ExampleInfo;
     return {
         setters: [
-            function (color_picker_2_1) {
-                color_picker_2 = color_picker_2_1;
+            function (index_3_1) {
+                index_3 = index_3_1;
             }
         ],
         execute: function () {
@@ -516,12 +522,12 @@ System.register("example-app/components/example-info", ["color-picker"], functio
                         color: 'black',
                     });
                     el.innerHTML = `
-      ${new color_picker_2.CssRgba([255, 255, 255, 255])}<br />
+      ${new index_3.CssRgba([255, 255, 255, 255])}<br />
       this thing is draggable<br />
       and<br />
       shows picked color
     `;
-                    const dragEl = new color_picker_2.Draggable(el, document.body);
+                    const dragEl = new index_3.Draggable(el, document.body);
                     dragEl.start();
                     this.el = el;
                     Object.assign(this.style, { display: 'flex' });
@@ -535,7 +541,7 @@ System.register("example-app/components/example-info", ["color-picker"], functio
                 }
                 onChangeColor(color) {
                     const colorData = color.split(',').map(slot => parseInt(slot));
-                    const cssRgba = new color_picker_2.CssRgba(colorData);
+                    const cssRgba = new index_3.CssRgba(colorData);
                     this.el.style.backgroundColor = cssRgba.toString();
                     this.el.innerText = cssRgba.toString();
                     this.el.style.color = colorData.slice(0, -1).reduce((acc, slot) => acc + slot, 0) > 255 * 3 / 2 ? 'black' : 'white';
@@ -545,14 +551,14 @@ System.register("example-app/components/example-info", ["color-picker"], functio
         }
     };
 });
-System.register("example-app/components/example-fade", ["color-picker"], function (exports_14, context_14) {
+System.register("example-app/components/example-fade", ["index"], function (exports_14, context_14) {
     "use strict";
     var __moduleName = context_14 && context_14.id;
-    var color_picker_3, ExampleFade;
+    var index_4, ExampleFade;
     return {
         setters: [
-            function (color_picker_3_1) {
-                color_picker_3 = color_picker_3_1;
+            function (index_4_1) {
+                index_4 = index_4_1;
             }
         ],
         execute: function () {
@@ -593,7 +599,7 @@ System.register("example-app/components/example-fade", ["color-picker"], functio
                         backgroundColor: 'black',
                         borderLeft: 'none',
                     });
-                    const dragEl = new color_picker_3.Draggable(this.list, document.body);
+                    const dragEl = new index_4.Draggable(this.list, document.body);
                     dragEl.start();
                 }
                 connectedCallback() {
